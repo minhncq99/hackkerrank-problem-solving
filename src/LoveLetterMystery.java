@@ -12,21 +12,14 @@ import java.util.stream.Collectors;
 public class LoveLetterMystery {
 	public static void main(String[] args) throws IOException {
 		Path path = Paths.get("");
-		FileReader fr = null;
-		BufferedReader bufferedReader = null;
-		try {
-			fr = new FileReader(path.toAbsolutePath().toString() + "/src/resources/loveLetterMystery.txt");
-			bufferedReader = new BufferedReader(fr);
-			
-			while(bufferedReader.ready()) {
+		try (FileReader fr = new FileReader(path.toAbsolutePath().toString() + "/src/resources/loveLetterMystery.txt"); BufferedReader bufferedReader = new BufferedReader(fr)) {
+
+			while (bufferedReader.ready()) {
 				List<String> list = stringToList(bufferedReader.readLine());
 				list.forEach(s -> System.out.println(solving(s)));
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
-		} finally {
-			if (fr != null) fr.close();
-			if (bufferedReader != null) bufferedReader.close();
 		}
 	}
 	
@@ -42,9 +35,8 @@ public class LoveLetterMystery {
 	
 	public static List<String> stringToList(String str) {
 		String strTestCase = str.split("-")[1];
-		List<String> result = Arrays.stream(strTestCase.split(" "))
-				.map(s -> s.trim()).filter(s -> (!s.equals("")))
+		return Arrays.stream(strTestCase.split(" "))
+				.map(String::trim).filter(s -> (!s.equals("")))
 				.collect(Collectors.toList());
-		return result;
 	}
 }
